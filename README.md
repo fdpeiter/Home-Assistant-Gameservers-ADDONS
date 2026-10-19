@@ -57,6 +57,7 @@ Examples:
 - 🛡️ Valheim Dedicated Server
 - 🧟 Palworld Dedicated Server
 - 🚀 StarRupture Dedicated Server  
+- 🔥 [Enshrouded Dedicated Server](enshrouded_steamcmd_server/README.md) (amd64, SteamCMD + Wine)
 *(more coming)*
 
 ---
