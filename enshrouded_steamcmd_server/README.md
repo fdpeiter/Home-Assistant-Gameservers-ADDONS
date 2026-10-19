@@ -60,6 +60,12 @@ Docker Desktop. HAOS installation and joining with a game client remain untested
 
 Friends need access to the **game service**, not the HA dashboard.
 
+For CGNAT without client software for friends, install the separate optional
+[Playit.gg add-on](../playit_gg/README.md) and follow its
+[Enshrouded tunnel example](../playit_gg/DOCS.md#enshrouded-example-only-udp-15637).
+It targets the HA host's published UDP 15637 port and can also share other games.
+Enshrouded itself does not contain or require Playit.
+
 ### Public IPv4 and router port forwarding
 
 1. Reserve a fixed LAN IP for the HA host in your router's DHCP settings.

@@ -60,6 +60,13 @@ Examples:
 - 🔥 [Enshrouded Dedicated Server](enshrouded_steamcmd_server/README.md) (amd64, SteamCMD + Wine)
 *(more coming)*
 
+### Optional external access through CGNAT
+
+Install the standalone [Playit.gg Game Server Tunnels add-on](playit_gg/README.md)
+to share any game server's TCP/UDP ports without a public home IP. One shared
+agent supports multiple dashboard-managed tunnels; friends need no extra software.
+Game add-ons work independently and do not require Playit.
+
 ---
 
 ## 🧩 One-Click Installation (Home Assistant)
