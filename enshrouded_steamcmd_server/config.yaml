@@ -1,0 +1,27 @@
+name: Enshrouded Dedicated Server (SteamCMD + Wine)
+slug: enshrouded_steamcmd_server
+version: "1.0.3"
+description: Enshrouded server with persistent worlds and automatic updates on startup
+arch:
+  - amd64
+startup: application
+boot: auto
+init: false
+timeout: 120
+host_network: false
+ports:
+  15637/udp: 15637
+ports_description:
+  15637/udp: Enshrouded query and game traffic
+map:
+  - share:rw
+options:
+  server_name: Enshrouded Home Server
+  server_password: ""
+  slots: 8
+  update_on_start: true
+schema:
+  server_name: str
+  server_password: password
+  slots: int(1,16)
+  update_on_start: bool
