@@ -1,0 +1,15 @@
+name: Playit.gg Game Server Tunnels
+slug: playit_gg
+version: "1.0.1"
+description: Optional shared Playit.gg agent for TCP and UDP game tunnels through CGNAT
+url: https://github.com/fdpeiter/Home-Assistant-Gameservers-ADDONS/tree/main/playit_gg
+arch:
+  - amd64
+startup: application
+boot: manual
+init: false
+host_network: false
+options:
+  secret_key: ""
+schema:
+  secret_key: password
