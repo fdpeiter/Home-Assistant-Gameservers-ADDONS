@@ -1,5 +1,6 @@
 """Merge HA options into the persistent server config without losing custom settings."""
 import json
+import math
 import os
 from pathlib import Path
 
@@ -9,6 +10,26 @@ def configure(options, path):
     if not password.strip():
         raise ValueError("Set a non-empty server_password in the add-on configuration first")
     config = json.loads(path.read_text()) if path.exists() else {}
+    if options.get("custom_game_settings", False):
+        settings = config.setdefault("gameSettings", {})
+        for option, field, minimum in (
+            ("resource_drop_multiplier", "resourceDropStackAmountFactor", 0.25),
+            ("combat_xp_multiplier", "experienceCombatFactor", 0.25),
+            ("mining_xp_multiplier", "experienceMiningFactor", 0),
+            ("exploration_quest_xp_multiplier", "experienceExplorationQuestsFactor", 0.25),
+            ("plant_growth_multiplier", "plantGrowthSpeedFactor", 0.25),
+            ("mining_effectiveness_multiplier", "miningDamageFactor", 0.5),
+        ):
+            value = options.get(option, 1.0)
+            if (isinstance(value, bool) or not isinstance(value, (int, float))
+                    or not math.isfinite(value) or not minimum <= value <= 2):
+                raise ValueError(f"{option} must be a number between {minimum} and 2")
+            settings[field] = value
+        fishing = options.get("fishing_difficulty", "Normal")
+        if fishing not in ("VeryEasy", "Easy", "Normal", "Hard", "VeryHard"):
+            raise ValueError("fishing_difficulty must be VeryEasy, Easy, Normal, Hard or VeryHard")
+        settings["fishingDifficulty"] = fishing
+        config["gameSettingsPreset"] = "Custom"
     config.update(
         name=options["server_name"], slotCount=options["slots"],
         ip="0.0.0.0", queryPort=15637,
