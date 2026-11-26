@@ -2,6 +2,7 @@
 
 - Add opt-in Home Assistant controls for material drops and combat, mining, and
   exploration/quest XP multipliers, including 2x rates.
+- Add plant growth and mining effectiveness multipliers and fishing difficulty.
 - Preserve existing gameplay configuration unless the new controls are enabled.
 
 # 1.1.0

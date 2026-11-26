@@ -23,7 +23,8 @@ class ConfigurationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             options = dict(custom_game_settings=True, resource_drop_multiplier=2,
                            combat_xp_multiplier=2, mining_xp_multiplier=2,
-                           exploration_quest_xp_multiplier=2)
+                           exploration_quest_xp_multiplier=2, plant_growth_multiplier=2,
+                           mining_effectiveness_multiplier=2, fishing_difficulty="VeryEasy")
             result = self.apply_settings(directory, options, {
                 "gameSettingsPreset": "Hard", "enableTextChat": True,
                 "gameSettings": {"enemyHealthFactor": 3, "experienceCombatFactor": 0.5}})
@@ -32,7 +33,8 @@ class ConfigurationTests(unittest.TestCase):
             self.assertEqual(result["gameSettings"], {
                 "enemyHealthFactor": 3, "resourceDropStackAmountFactor": 2,
                 "experienceCombatFactor": 2, "experienceMiningFactor": 2,
-                "experienceExplorationQuestsFactor": 2})
+                "experienceExplorationQuestsFactor": 2, "plantGrowthSpeedFactor": 2,
+                "miningDamageFactor": 2, "fishingDifficulty": "VeryEasy"})
             self.assertEqual(self.apply_settings(directory, options), result)
             self.assertEqual(self.apply_settings(directory, {"custom_game_settings": False}), result)
 
@@ -51,11 +53,13 @@ class ConfigurationTests(unittest.TestCase):
             self.assertEqual(result["gameSettingsPreset"], "Custom")
             self.assertEqual(result["gameSettings"], {
                 "resourceDropStackAmountFactor": 1.5, "experienceMiningFactor": 0,
-                "experienceCombatFactor": 1, "experienceExplorationQuestsFactor": 1})
+                "experienceCombatFactor": 1, "experienceExplorationQuestsFactor": 1,
+                "plantGrowthSpeedFactor": 1, "miningDamageFactor": 1, "fishingDifficulty": "Normal"})
 
     def test_invalid_rates_do_not_modify_config(self):
         for option in ("resource_drop_multiplier", "combat_xp_multiplier",
-                       "mining_xp_multiplier", "exploration_quest_xp_multiplier"):
+                       "mining_xp_multiplier", "exploration_quest_xp_multiplier",
+                       "plant_growth_multiplier", "mining_effectiveness_multiplier"):
             for value in (-1, 2.01, True, "2", None, float("nan"), float("inf")):
                 with self.subTest(option=option, value=value), tempfile.TemporaryDirectory() as directory:
                     path = Path(directory) / "server.json"
@@ -64,6 +68,18 @@ class ConfigurationTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         self.apply_settings(directory, {"custom_game_settings": True, option: value})
                     self.assertEqual(path.read_text(), original)
+
+    def test_fishing_choices_and_invalid_value(self):
+        for value in ("VeryEasy", "Easy", "Normal", "Hard", "VeryHard"):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                result = self.apply_settings(directory, {"custom_game_settings": True,
+                                                        "fishing_difficulty": value})
+                self.assertEqual(result["gameSettings"]["fishingDifficulty"], value)
+        with tempfile.TemporaryDirectory() as directory:
+            with self.assertRaises(ValueError):
+                self.apply_settings(directory, {"custom_game_settings": True,
+                                                "fishing_difficulty": "veryeasy"})
+            self.assertFalse((Path(directory) / "server.json").exists())
 
     def test_reject_empty_password_before_creating_config(self):
         with tempfile.TemporaryDirectory() as directory:

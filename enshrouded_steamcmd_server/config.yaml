@@ -28,6 +28,9 @@ options:
   combat_xp_multiplier: 1.0
   mining_xp_multiplier: 1.0
   exploration_quest_xp_multiplier: 1.0
+  plant_growth_multiplier: 1.0
+  mining_effectiveness_multiplier: 1.0
+  fishing_difficulty: Normal
 schema:
   server_name: str
   server_password: password
@@ -41,3 +44,6 @@ schema:
   combat_xp_multiplier: float(0.25,2)
   mining_xp_multiplier: float(0,2)
   exploration_quest_xp_multiplier: float(0.25,2)
+  plant_growth_multiplier: float(0.25,2)
+  mining_effectiveness_multiplier: float(0.5,2)
+  fishing_difficulty: list(VeryEasy|Easy|Normal|Hard|VeryHard)
