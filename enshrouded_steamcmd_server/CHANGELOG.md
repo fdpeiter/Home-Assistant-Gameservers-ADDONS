@@ -1,3 +1,9 @@
+# 1.2.0
+
+- Add opt-in Home Assistant controls for material drops and combat, mining, and
+  exploration/quest XP multipliers, including 2x rates.
+- Preserve existing gameplay configuration unless the new controls are enabled.
+
 # 1.1.0
 
 - Add optional periodic checks for a newer public Steam dedicated-server build.

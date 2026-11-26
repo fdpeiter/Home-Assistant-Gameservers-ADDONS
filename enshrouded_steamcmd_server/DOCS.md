@@ -67,6 +67,57 @@ or unreadable installed build metadata disables monitoring with a log message.
 Steam metadata failures leave the running game in place. In-game announcements
 are not sent.
 
+## Drops, XP and all Home Assistant options
+
+Version 1.2.0 adds gameplay controls to the add-on Configuration tab. To double
+material drops and all three XP categories, keep your existing options and set:
+
+```yaml
+custom_game_settings: true
+resource_drop_multiplier: 2.0
+combat_xp_multiplier: 2.0
+mining_xp_multiplier: 2.0
+exploration_quest_xp_multiplier: 2.0
+```
+
+Save and restart the add-on. These settings are also reapplied after automatic
+updates. No manual server JSON edit is needed.
+
+| Option | Default | Allowed values / behavior |
+| --- | --- | --- |
+| `server_name` | `Enshrouded Home Server` | Server display name |
+| `server_password` | Empty | Must be non-empty before startup |
+| `slots` | `8` | Integer, 1–16 players |
+| `update_on_start` | `true` | Update on startup; missing server always installs |
+| `auto_update` | `false` | Automatic empty-server updates; requires `update_on_start` |
+| `update_check_minutes` | `30` | Integer, 5–1440 minutes |
+| `update_idle_minutes` | `5` | Integer, 1–60 minutes |
+| `custom_game_settings` | `false` | Enable the four multiplier controls and select Custom difficulty |
+| `resource_drop_multiplier` | `1.0` | 0.25–2.0; materials per loot stack |
+| `combat_xp_multiplier` | `1.0` | 0.25–2.0; combat XP |
+| `mining_xp_multiplier` | `1.0` | 0–2.0; mining XP |
+| `exploration_quest_xp_multiplier` | `1.0` | 0.25–2.0; exploration and quest XP |
+
+Fractional values such as `1.5` are supported. Drops apply to material stacks,
+not the number of weapons or chests. Mining yield per hit is a separate game
+setting (`miningDamageFactor`) and is not controlled by the drops multiplier.
+
+With `custom_game_settings: false`, the add-on leaves existing difficulty and
+gameplay settings untouched, including manually configured rates. Turning it
+off after using it does **not** reset the last applied rates or preset. To return
+the four rates to normal, leave it enabled and set them to `1.0`.
+Enabling it switches to `Custom`; other existing gameplay fields are preserved,
+but preset-derived difficulty is no longer selected.
+
+The game's additional JSON settings cover player health/mana/stamina, cold and
+diving time, durability, hunger, food duration, Shroud time, death drops, glider
+turbulence, weather, fishing, mining yield, plant growth, workstation production,
+weapon upgrade/recycling, enemy population/aggression/health/damage/perception,
+boss health/damage, taming, day/night duration and Shroud curse. These are not
+exposed in this add-on's Configuration tab. See the
+[official gameplay settings reference](https://enshrouded.zendesk.com/hc/en-us/articles/20453241249821-Server-Gameplay-Settings)
+for every JSON key and its allowed values.
+
 ## Data and configuration
 
 All server files persist under `/share/enshrouded`:
@@ -81,7 +132,8 @@ Wine's prefix is stored in the add-on's persistent `/data/wine` directory.
 HA options override name, slots, bind IP, query port, save/log paths and
 `userGroups` on every startup. The wrapper creates one password-protected
 Friend group (building, inventory and altar access; no kick/ban privileges).
-Other JSON fields, such as difficulty settings, are preserved. Stop the add-on
+Other JSON fields are preserved, except the difficulty preset and four rates
+when `custom_game_settings` is enabled as described above. Stop the add-on
 before editing those fields. Custom role groups are overwritten.
 
 Stop the server before copying or restoring saves. Include `/share/enshrouded`

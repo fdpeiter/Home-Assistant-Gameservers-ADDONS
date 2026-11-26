@@ -1,6 +1,6 @@
 name: Enshrouded Dedicated Server (SteamCMD + Wine)
 slug: enshrouded_steamcmd_server
-version: "1.1.0"
+version: "1.2.0"
 description: Enshrouded server with persistent worlds and automatic updates on startup
 arch:
   - amd64
@@ -23,6 +23,11 @@ options:
   auto_update: false
   update_check_minutes: 30
   update_idle_minutes: 5
+  custom_game_settings: false
+  resource_drop_multiplier: 1.0
+  combat_xp_multiplier: 1.0
+  mining_xp_multiplier: 1.0
+  exploration_quest_xp_multiplier: 1.0
 schema:
   server_name: str
   server_password: password
@@ -31,3 +36,8 @@ schema:
   auto_update: bool
   update_check_minutes: int(5,1440)
   update_idle_minutes: int(1,60)
+  custom_game_settings: bool
+  resource_drop_multiplier: float(0.25,2)
+  combat_xp_multiplier: float(0.25,2)
+  mining_xp_multiplier: float(0,2)
+  exploration_quest_xp_multiplier: float(0.25,2)
